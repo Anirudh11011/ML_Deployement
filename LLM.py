@@ -1,11 +1,13 @@
+import pysqlite3
+import sys
+sys.modules["sqlite3"] = pysqlite3
+
 import streamlit as st
 import pandas as pd
 import uuid
 import chromadb
 
-import pysqlite3
-import sys
-sys.modules["sqlite3"] = pysqlite3
+
 
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
