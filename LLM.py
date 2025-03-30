@@ -90,7 +90,7 @@ if generate_button and job_url:
         # Query portfolio
         collection = load_portfolio()
         links = collection.query(query_texts=job['skills'], n_results=2).get('metadatas', [])
-        link_list = [l["links"] for l in links]
+        link_list = links[0][0]["links"] if links and links[0] else ""
 
         # Generate email
         chain_email = prompt_email | llm
