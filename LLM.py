@@ -38,6 +38,20 @@ def load_portfolio():
             )
     return collection
 
+
+
+from bs4 import BeautifulSoup
+
+def remove_images(html):
+    soup = BeautifulSoup(html, "html.parser")
+    # Remove all image tags
+    for img in soup.find_all("img"):
+        img.decompose()
+    # Return the text content only
+    return soup.get_text()
+
+
+
 # Define prompt templates
 prompt_extract = PromptTemplate.from_template(
     """
@@ -79,12 +93,14 @@ generate_button = st.button("Generate Email")
 if generate_button and job_url:
     with st.spinner("Scraping and processing..."):
         # Load job content
-        loader = WebBaseLoader(job_url)
+        # Load the page data
         page_data = loader.load().pop().page_content
+        # Clean the page data to remove images
+        cleaned_page_data = remove_images(page_data)
 
         # Extract job info
         chain_extract = prompt_extract | llm
-        res = chain_extract.invoke(input={'page_data': page_data})
+        res = chain_extract.invoke(input={'page_data': cleaned_page_data})
         job = JsonOutputParser().parse(res.content)
 
         # Query portfolio
