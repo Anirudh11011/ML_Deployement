@@ -94,8 +94,10 @@ if generate_button and job_url:
     with st.spinner("Scraping and processing..."):
         # Load job content
         # Load the page data
+        loader = WebBaseLoader(job_url)
         page_data = loader.load().pop().page_content
-        # Clean the page data to remove images
+
+        # Clean the page data to remove image tags
         cleaned_page_data = remove_images(page_data)
 
         # Extract job info
